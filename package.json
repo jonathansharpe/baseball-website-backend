@@ -1,0 +1,21 @@
+{
+  "name": "baseball-website-backend",
+  "version": "1.0.0",
+  "description": "This holds the backend for the baseball website, as an API for MongoDB.",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongodb": "^6.2.0",
+    "node": "^21.0.0",
+    "nodemon": "^3.0.1",
+    "npm": "^10.2.1",
+    "requirejs": "^2.3.6"
+  }
+}
