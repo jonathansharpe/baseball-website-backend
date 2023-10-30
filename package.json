@@ -4,8 +4,8 @@
   "description": "This holds the backend for the baseball website, as an API for MongoDB.",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js"
+    "dev": "PORT=3000 nodemon server.js",
+    "start": "PORT=5000 node server.js"
   },
   "author": "",
   "license": "ISC",
