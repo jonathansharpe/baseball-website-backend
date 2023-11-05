@@ -17,3 +17,33 @@ exports.getAllVenues = async (req, res) => {
 		console.log(`no listings found`);
 	}
 }
+
+exports.getVenues = async (req, res) => {
+	db = dbUtil.getDb();
+	try {
+		const retVal = await db.collection("venues").find({
+			curName: req.body.curName,
+			firstYear: req.body.firstYear,
+			prevNames: req.body.prevNames,
+			springTraining: req.body.springTraining,
+		});
+		console.log(retVal);
+		const results = await retVal.toArray();
+		console.log(results);
+		if (results.length > 0 ) {
+			results.forEach((result, i) => {
+				res.send(`${i+1}. game: ${result}`);
+			})
+			return;
+		}
+		else {
+			res.send(`no listings found`);
+			return;
+		}
+	} 
+	catch (err) {
+		return res.status(500).send({
+			message: err.message || "something went wrong"
+		});
+	}
+}
