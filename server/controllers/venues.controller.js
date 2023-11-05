@@ -21,20 +21,11 @@ exports.getAllVenues = async (req, res) => {
 exports.getVenues = async (req, res) => {
 	db = dbUtil.getDb();
 	try {
-		const retVal = await db.collection("venues").find({
-			curName: req.body.curName,
-			firstYear: req.body.firstYear,
-			prevNames: req.body.prevNames,
-			springTraining: req.body.springTraining,
-		});
-		console.log(retVal);
-		const results = await retVal.toArray();
-		console.log(results);
+		const results = await db.collection("venues").find(req.body).toArray();
 		if (results.length > 0 ) {
-			results.forEach((result, i) => {
-				res.send(`${i+1}. game: ${result}`);
-			})
-			return;
+			console.log("sending results...");
+			console.log(results);
+			res.send(results);
 		}
 		else {
 			res.send(`no listings found`);
