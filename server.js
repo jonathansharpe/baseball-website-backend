@@ -18,6 +18,7 @@ app.use(function(req, res, next) {
 
 require('./server/routes/games.routes.js')(app);
 require('./server/routes/venues.routes.js')(app);
+require('./server/routes/teams.routes.js')(app);
 
 const PORT = process.env.PORT || 3000;
 
