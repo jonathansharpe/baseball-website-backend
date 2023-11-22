@@ -34,7 +34,10 @@ exports.getGames = async (req, res) => {
 			'springTraining',
 		];
 		fieldsToCheck.forEach((field) => {
-			if (req.body[field] !== undefined && req.body[field] !== '') {
+			if (Array.isArray(req.body[field]) && req.body[field].length > 0) {
+				query[field] = { $in: req.body[field] };
+			}
+			else if (req.body[field] !== undefined && req.body[field] !== '') {
 				query[field] = req.body[field];
 			}
 		});
