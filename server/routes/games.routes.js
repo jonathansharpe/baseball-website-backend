@@ -5,6 +5,7 @@ module.exports = app => {
 
 	router.get('/getAllGames', games.getAllGames);
 	router.get('/getGames', games.getGames);
+	router.post('/getGames', games.getGames);
 
 	app.use('/api/games', router);
 };
