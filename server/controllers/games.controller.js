@@ -20,40 +20,22 @@ exports.getAllGames = async (req, res) => {
 
 exports.getGames = async (req, res) => {
 	db = dbUtil.getDb();
+	const query = {};
+
+	Object.entries(req.body).forEach(([field, values]) => {
+		if (Array.isArray(values) && values.length > 0) {
+			query[field] = { $in: values};
+		}
+	});
+
 	try {
-		const query = {};
-		const fieldsToCheck = [
-			'month', 
-			'day',
-			'year',
-			'homeTeam',
-			'roadTeam',
-			'homeTeamRuns',
-			'roadTeamRuns',
-			'venue',
-			'springTraining',
-		];
-		fieldsToCheck.forEach((field) => {
-			if (Array.isArray(req.body[field]) && req.body[field].length > 0) {
-				query[field] = { $in: req.body[field] };
-			}
-			else if (req.body[field] !== undefined && req.body[field] !== '') {
-				query[field] = req.body[field];
-			}
-		});
 		console.log(query);
 		const retVal = await db.collection("games").find(query);
 		// console.log(retVal);
 		const results = await retVal.toArray();
 		// console.log(results);
-		if (results.length > 0 ) {
-			res.send(results);
-			return;
-		}
-		else {
-			res.send(`no listings found`);
-			return;
-		}
+		res.send(results);
+		return;
 	} 
 	catch (err) {
 		return res.status(500).send({
