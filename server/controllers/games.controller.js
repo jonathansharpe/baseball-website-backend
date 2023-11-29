@@ -29,7 +29,7 @@ exports.getGames = async (req, res) => {
 	});
 
 	try {
-		console.log(query);
+		// console.log(query);
 		const retVal = await db.collection("games").find(query);
 		// console.log(retVal);
 		const results = await retVal.toArray();
