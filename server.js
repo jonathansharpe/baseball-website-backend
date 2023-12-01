@@ -3,6 +3,8 @@
  * this file is run to start the backend server. it makes calls to connect to the database and the rest is handled by routes.
  */
 const express = require('express');
+const fs = require("fs");
+const https = require('https');
 const {MongoClient} = require('mongodb');
 require('dotenv').config();
 const app = express();
@@ -28,9 +30,16 @@ async function main() {
 		// console.log(`this should send after the database is initialized`);
 		// await getGames(client);
 		// await client.close();
-		app.listen(PORT, () => {
-			console.log(`Server is running on port ${PORT}`);
-		});
+		https
+			.createServer({
+				key: fs.readFileSync("key.pem"),
+				cert: fs.readFileSync("cert.pem"),
+			},
+				app
+			)
+			.listen(PORT, () => {
+				console.log(`Server is running on port ${PORT}`);
+			});
 	} catch (e) {
 		console.error(`Something went wrong: ${e}`);
 	}
