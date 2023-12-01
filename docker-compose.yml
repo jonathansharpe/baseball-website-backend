@@ -7,8 +7,7 @@ services:
       dockerfile: Dockerfile
     image: "website-backend"
     container_name: "website-backend"
-    restart: unless-stopped
     ports:
       - "5000:5000"
     volumes:
-      - .:${VOLUME_DIR}
+      - ./certs:/app/certs

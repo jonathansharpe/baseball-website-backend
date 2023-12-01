@@ -1,6 +1,8 @@
 FROM node:latest
 WORKDIR /app
-COPY package.json /app
+COPY package*.json .
 RUN npm install
-COPY . /app
+COPY certs /app/certs
+COPY . .
+EXPOSE 5000
 CMD ["npm", "start"]
