@@ -32,8 +32,8 @@ async function main() {
 		// await client.close();
 		https
 			.createServer({
-				key: fs.readFileSync("./certs/key.pem"),
-				cert: fs.readFileSync("./certs/cert.pem"),
+				key: fs.readFileSync('jsharpe.xyz.key'),
+				cert: fs.readFileSync('jsharpe.xyz.pem'),
 			},
 				app
 			)
