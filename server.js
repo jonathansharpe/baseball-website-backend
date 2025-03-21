@@ -5,24 +5,27 @@
 const express = require('express');
 const fs = require("fs");
 const https = require('https');
+const http = require('http');
 const {MongoClient} = require('mongodb');
+const cors = require('cors');
 require('dotenv').config();
 const app = express();
 const dbUtil = require('./server/db.js');
 app.use(express.json());
 
-app.use(function(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-	next();
-})
+// CORS configuration
+app.use(cors({
+	origin: ['http://localhost:5173', 'https://localhost:5173', 'https://jsharpe.xyz'],
+	methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+	allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
+	credentials: true
+}));
 
 require('./server/routes/games.routes.js')(app);
 require('./server/routes/venues.routes.js')(app);
 require('./server/routes/teams.routes.js')(app);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 async function main() {
 	try {
@@ -30,16 +33,27 @@ async function main() {
 		// console.log(`this should send after the database is initialized`);
 		// await getGames(client);
 		// await client.close();
-		https
-			.createServer({
-				key: fs.readFileSync('jsharpe.xyz.key'),
-				cert: fs.readFileSync('jsharpe.xyz.pem'),
-			},
-				app
-			)
-			.listen(PORT, () => {
-				console.log(`Server is running on port ${PORT}`);
-			});
+		if (PORT == 3000 || PORT === '3000') {
+			// uses http for dev mode, to avoid CORS error
+			http
+				.createServer(app)
+				.listen(PORT, () => {
+					console.log("Server running in dev mode")
+					console.log(`Server is running on port ${PORT}`);
+				});
+		} else {
+			https
+				.createServer({
+					key: fs.readFileSync('jsharpe.xyz.key'),
+					cert: fs.readFileSync('jsharpe.xyz.pem'),
+				},
+					app
+				)
+				.listen(PORT, () => {
+					console.log("Server running in prod mode")
+					console.log(`Server is running on port ${PORT}`);
+				});
+		}
 	} catch (e) {
 		console.error(`Something went wrong: ${e}`);
 	}
